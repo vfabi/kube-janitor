@@ -306,8 +306,7 @@ Easiest way to contribute is to provide feedback! We would love to hear
 what you like and what you think is missing. Create an issue or [ping
 try\_except\_ on Twitter](https://twitter.com/try_except_).
 
-PRs are welcome. Please also have a look at [issues labeled with \"help
-wanted\"](https://github.com/hjacobs/kube-janitor/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22).
+PRs are welcome.
 
 Local Development
 -----------------
