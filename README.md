@@ -60,7 +60,7 @@ Deploy the janitor into your cluster via (also works with
 > `default`, you need to edit `/deploy/rbac.yaml` first.
 
 ``` {.sourceCode .bash}
-$ kubectl apply -f deploy/
+$ kubectl apply -k deploy/
 ```
 
 The example configuration uses the `--dry-run` as a safety flag to
