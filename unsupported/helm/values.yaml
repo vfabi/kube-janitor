@@ -34,6 +34,9 @@ kubejanitor:
 cron:
   schedule: "*/5 * * * *"
   failedJobsHistoryLimit: 3
+  # # for the cases of cron controller interuption
+  # # https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/
+  # startingDeadlineSeconds: 300
 
 restartPolicy: OnFailure
 resources:
