@@ -18,6 +18,7 @@ Some of the default values are not specified in the `values.yaml` and are instea
 | `cron.schedule`          | `CronJobSpec` for set the schedule of the CronJob resource   | string  | `*/5 * * * *`               |
 | `cron.successfulJobsHistoryLimit` | `CronJobSpec` for number of successful jobs to keep | integer | `3` (k8s default)           |
 | `cron.failedJobsHistoryLimit`     | `CronJobSpec` for number of failed jobs to keep     | integer | `3`                         |
+| `cron.startingDeadlineSeconds`     | `CronJobSpec` for number of length of time window (in seconds) within which to check for jobs failed to run | integer | unset                         |
 | `cron.suspend`           | `CronJobSpec` for telling the controller whether to suspend subsequent jobs                         | boolean | false (k8s default)          |
 | `kubejanitor.dryRun`     | Deployed in dry-run mode only. The job will print out what would be done, but does not make changes | boolean | false                        |
 | `kubejanitor.debug`      | Run in debug-mode                                             | boolean | false                      |

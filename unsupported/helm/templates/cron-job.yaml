@@ -18,6 +18,9 @@ spec:
   {{- if .Values.cron.suspend }}
   suspend: {{ .Values.cron.suspend }}
   {{- end }}
+  {{- if .Values.cron.startingDeadlineSeconds }}
+  startingDeadlineSeconds: {{ .Values.cron.startingDeadlineSeconds }}
+  {{- end }}
   jobTemplate:
     spec:
       template:
