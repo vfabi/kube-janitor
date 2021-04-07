@@ -47,8 +47,12 @@ def matches_resource_filter(
         "all" in include_resources or resource_type_plural in include_resources
     )
     namespace_included = "all" in include_namespaces or namespace in include_namespaces
-    resource_excluded = resource_type_plural in exclude_resources
-    namespace_excluded = namespace in exclude_namespaces
+    resource_excluded = (
+        "all" in exclude_resources and resource_type_plural not in include_resources
+    ) or resource_type_plural in exclude_resources
+    namespace_excluded = (
+        "all" in exclude_namespaces and namespace not in include_namespaces
+    ) or namespace in exclude_namespaces
     return (
         resource_included
         and not resource_excluded
@@ -327,7 +331,11 @@ def clean_up(
             )
             counter.update(
                 handle_resource_on_expiry(
-                    namespace, rules, delete_notification, wait_after_delete, dry_run,
+                    namespace,
+                    rules,
+                    delete_notification,
+                    wait_after_delete,
+                    dry_run,
                 )
             )
         else:
