@@ -331,11 +331,7 @@ def clean_up(
             )
             counter.update(
                 handle_resource_on_expiry(
-                    namespace,
-                    rules,
-                    delete_notification,
-                    wait_after_delete,
-                    dry_run,
+                    namespace, rules, delete_notification, wait_after_delete, dry_run,
                 )
             )
         else:
