@@ -262,7 +262,9 @@ def handle_resource_on_expiry(
                 message = f"{resource.kind} {resource.name} expired on {expiry} and will be deleted ({reason})"
                 logger.info(message)
                 if delete_notification:
-                    create_event(resource, message, "ExpiryTimeReached", dry_run=dry_run)
+                    create_event(
+                        resource, message, "ExpiryTimeReached", dry_run=dry_run
+                    )
                 delete(resource, wait_after_delete=wait_after_delete, dry_run=dry_run)
                 counter[f"{resource.endpoint}-deleted"] = 1
             else:
@@ -298,7 +300,9 @@ def clean_up(
     counter: Counter = Counter()
     cache: Dict[str, Any] = {}
 
-    if ("all" in include_resources and "namespace" not in exclude_resources) or "namespace" in include_resources:
+    if (
+        "all" in include_resources and "namespace" not in exclude_resources
+    ) or "namespace" in include_resources:
         namespaces = []
 
         if "all" in include_namespaces:
@@ -330,13 +334,17 @@ def clean_up(
                 )
                 counter.update(
                     handle_resource_on_expiry(
-                        namespace, rules, delete_notification, wait_after_delete, dry_run,
+                        namespace,
+                        rules,
+                        delete_notification,
+                        wait_after_delete,
+                        dry_run,
                     )
                 )
             else:
                 logger.debug(f"Skipping {namespace.kind} {namespace}")
     else:
-        logger.debug(f"Skipping resource type namespace")
+        logger.debug("Skipping resource type namespace")
 
     already_seen: set = set()
 
@@ -344,7 +352,9 @@ def clean_up(
 
     resource_types = get_namespaced_resource_types(api)
     for _type in resource_types:
-        if ("all" in include_resources and _type.endpoint not in exclude_resources) or _type.endpoint in include_resources:
+        if (
+            "all" in include_resources and _type.endpoint not in exclude_resources
+        ) or _type.endpoint in include_resources:
             try:
                 resources = []
                 if "all" in include_namespaces:
