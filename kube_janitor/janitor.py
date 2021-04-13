@@ -222,9 +222,10 @@ def handle_resource_on_ttl(
                 if age.total_seconds() > ttl_seconds:
                     message = f"{resource.kind} {resource.name} with {ttl} TTL is {age_formatted} old and will be deleted ({reason})"
                     logger.info(message)
-                    create_event(
-                        resource, message, "TimeToLiveExpired", dry_run=dry_run
-                    )
+                    if delete_notification:
+                        create_event(
+                            resource, message, "TimeToLiveExpired", dry_run=dry_run
+                        )
                     delete(
                         resource, wait_after_delete=wait_after_delete, dry_run=dry_run
                     )
@@ -264,7 +265,10 @@ def handle_resource_on_expiry(
             if now > expiry_timestamp:
                 message = f"{resource.kind} {resource.name} expired on {expiry} and will be deleted ({reason})"
                 logger.info(message)
-                create_event(resource, message, "ExpiryTimeReached", dry_run=dry_run)
+                if delete_notification:
+                    create_event(
+                        resource, message, "ExpiryTimeReached", dry_run=dry_run
+                    )
                 delete(resource, wait_after_delete=wait_after_delete, dry_run=dry_run)
                 counter[f"{resource.endpoint}-deleted"] = 1
             else:
@@ -300,42 +304,51 @@ def clean_up(
     counter: Counter = Counter()
     cache: Dict[str, Any] = {}
 
-    namespaces = []
+    if (
+        "all" in include_resources and "namespace" not in exclude_resources
+    ) or "namespace" in include_resources:
+        namespaces = []
 
-    if "all" in include_namespaces:
-        namespaces.extend(list(Namespace.objects(api)))
-    else:
-        for namespace_name in include_namespaces:
-            namespace = Namespace.objects(api).get(name=namespace_name)
-            namespaces.append(namespace)
-
-    for namespace in namespaces:
-        if matches_resource_filter(
-            namespace,
-            include_resources,
-            exclude_resources,
-            include_namespaces,
-            exclude_namespaces,
-        ):
-            counter.update(
-                handle_resource_on_ttl(
-                    namespace,
-                    rules,
-                    delete_notification,
-                    deployment_time_annotation,
-                    resource_context_hook,
-                    cache,
-                    wait_after_delete,
-                    dry_run,
-                )
-            )
-            counter.update(
-                handle_resource_on_expiry(
-                    namespace, rules, delete_notification, wait_after_delete, dry_run,
-                )
-            )
+        if "all" in include_namespaces:
+            namespaces.extend(list(Namespace.objects(api)))
         else:
-            logger.debug(f"Skipping {namespace.kind} {namespace}")
+            for namespace_name in include_namespaces:
+                namespace = Namespace.objects(api).get(name=namespace_name)
+                namespaces.append(namespace)
+
+        for namespace in namespaces:
+            if matches_resource_filter(
+                namespace,
+                include_resources,
+                exclude_resources,
+                include_namespaces,
+                exclude_namespaces,
+            ):
+                counter.update(
+                    handle_resource_on_ttl(
+                        namespace,
+                        rules,
+                        delete_notification,
+                        deployment_time_annotation,
+                        resource_context_hook,
+                        cache,
+                        wait_after_delete,
+                        dry_run,
+                    )
+                )
+                counter.update(
+                    handle_resource_on_expiry(
+                        namespace,
+                        rules,
+                        delete_notification,
+                        wait_after_delete,
+                        dry_run,
+                    )
+                )
+            else:
+                logger.debug(f"Skipping {namespace.kind} {namespace}")
+    else:
+        logger.debug("Skipping resource type namespace")
 
     already_seen: set = set()
 
@@ -343,7 +356,9 @@ def clean_up(
 
     resource_types = get_namespaced_resource_types(api)
     for _type in resource_types:
-        if _type.endpoint not in exclude_resources:
+        if (
+            "all" in include_resources and _type.endpoint not in exclude_resources
+        ) or _type.endpoint in include_resources:
             try:
                 resources = []
                 if "all" in include_namespaces:
@@ -375,6 +390,8 @@ def clean_up(
                         )
             except Exception as e:
                 logger.error(f"Could not list {_type.kind} objects: {e}")
+        else:
+            logger.debug(f"Skipping resource type {_type.endpoint}")
 
     for resource in filtered_resources:
         counter.update(
