@@ -31,6 +31,34 @@ def test_matches_resource_filter():
     assert not matches_resource_filter(foo_ns, ALL, [], ALL, ["foo"])
     assert not matches_resource_filter(foo_ns, ALL, ["namespaces"], ALL, [])
     assert matches_resource_filter(foo_ns, ALL, ["deployments"], ALL, ["kube-system"])
+    assert matches_resource_filter(
+        foo_ns,
+        include_resources=["namespaces"],
+        exclude_resources=ALL,
+        include_namespaces=["foo"],
+        exclude_namespaces=[],
+    )
+    assert not matches_resource_filter(
+        foo_ns,
+        include_resources=["deployments"],
+        exclude_resources=ALL,
+        include_namespaces=["foo"],
+        exclude_namespaces=[],
+    )
+    assert matches_resource_filter(
+        foo_ns,
+        include_resources=["namespaces"],
+        exclude_resources=[],
+        include_namespaces=["foo"],
+        exclude_namespaces=ALL,
+    )
+    assert not matches_resource_filter(
+        foo_ns,
+        include_resources=["namespaces"],
+        exclude_resources=[],
+        include_namespaces=["bar"],
+        exclude_namespaces=ALL,
+    )
 
 
 def test_delete_namespace(caplog):
