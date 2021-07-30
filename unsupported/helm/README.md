@@ -15,6 +15,7 @@ Some of the default values are not specified in the `values.yaml` and are instea
 | `image.repository`       | Image repository                                             | string  | `hjacobs/kube-janitor`      |
 | `image.tag`              | Image tag                                                    | string  | `20.4.1`                    |
 | `image.pullPolicy`       | Image pull policy                                            | string  | `IfNotPresent`              |
+| `image.pullSecrets`      | Image pull secrets                                           | list    | `[]`                        |
 | `cron.schedule`          | `CronJobSpec` for set the schedule of the CronJob resource   | string  | `*/5 * * * *`               |
 | `cron.successfulJobsHistoryLimit` | `CronJobSpec` for number of successful jobs to keep | integer | `3` (k8s default)           |
 | `cron.failedJobsHistoryLimit`     | `CronJobSpec` for number of failed jobs to keep     | integer | `3`                         |
