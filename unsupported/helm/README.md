@@ -23,7 +23,7 @@ Some of the default values are not specified in the `values.yaml` and are instea
 | `cron.suspend`           | `CronJobSpec` for telling the controller whether to suspend subsequent jobs                         | boolean | false (k8s default)          |
 | `kubejanitor.dryRun`     | Deployed in dry-run mode only. The job will print out what would be done, but does not make changes | boolean | false                        |
 | `kubejanitor.debug`      | Run in debug-mode                                             | boolean | false                      |
-| `kubejanitor.once`       | Run once and exit. This MUST BE true for running as a CronJob | boolnea | true                       |
+| `kubejanitor.once`       | Run once and exit. This MUST BE true for running as a CronJob | boolean | true                       |
 | `kubejanitor.interval`   | Interval for rerunning the execution ONLY USE WHEN not running in CronJob ie. once is set to false  | string  | 30s (kube-janitor default)   |
 | `kubejanitor.includeResources`  | List of k8s resource types to include, ex. `deployment,svc,ingress` | all resources (kube-janitor default)               | |
 | `kubejanitor.excludeResources`  | List of k8s resource types to exclude                               | events,controllerrevisions (kube-janitor default)  | |
