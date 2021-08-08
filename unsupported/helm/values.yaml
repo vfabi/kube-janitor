@@ -1,6 +1,6 @@
 image:
   repository: hjacobs/kube-janitor
-  tag: 20.4.1
+  tag: 20.10.0
   pullPolicy: IfNotPresent
   pullSecrets: []
 
@@ -8,9 +8,11 @@ kubejanitor:
   dryRun: false
   debug: false
   once: true
+  additionalArgs: []
   # example rules configuration to set TTL for arbitrary objects
   # see https://github.com/hjacobs/kube-janitor for details
-  rules: []
+  rules:
+    []
     # - id: require-application-label
     #   # remove deployments and statefulsets without a label "application"
     #   resources:
@@ -33,6 +35,8 @@ kubejanitor:
     #   ttl: 4h
 
 cron:
+  # when enabled is set to false, a deployment will be used instead.
+  enabled: true
   schedule: "*/5 * * * *"
   failedJobsHistoryLimit: 3
   # # for the cases of cron controller interuption
