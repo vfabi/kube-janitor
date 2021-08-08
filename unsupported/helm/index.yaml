@@ -7,7 +7,7 @@ entries:
     description: Clean up (delete) Kubernetes resources after a configured TTL (time
       to live)
     digest: e2a0eeafb37b688d4a3d8b4f56268abf55edce6ffd36e87b957d64acb5fd5d27
-    home: https://github.com/hjacobs/kube-janitor
+    home: https://codeberg.org/hjacobs/kube-janitor
     maintainers:
     - email: henning@jacobs1.de
       name: hjacobs
@@ -15,7 +15,7 @@ entries:
       name: mayppong
     name: kube-janitor
     sources:
-    - https://github.com/hjacobs/kube-janitor
+    - https://codeberg.org/hjacobs/kube-janitor
     urls:
     - kube-janitor-0.1.0.tgz
     version: 0.1.0
