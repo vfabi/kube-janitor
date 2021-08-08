@@ -30,3 +30,8 @@ push: docker
 	docker push "$(IMAGE):$(TAG)"
 	docker tag "$(IMAGE):$(TAG)" "$(IMAGE):latest"
 	docker push "$(IMAGE):latest"
+
+.PHONY: helm-docs
+helm-docs:
+	@helm-docs -o Values.md
+

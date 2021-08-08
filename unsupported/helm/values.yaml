@@ -1,15 +1,18 @@
 image:
+  # -- Image to use for deploying
   repository: hjacobs/kube-janitor
   tag: 20.10.0
   pullPolicy: IfNotPresent
   pullSecrets: []
 
+# -- Kube-janitor configuration
 kubejanitor:
   dryRun: false
   debug: false
   once: true
+  # -- Additional arguments to pass to the command
   additionalArgs: []
-  # example rules configuration to set TTL for arbitrary objects
+  # -- example rules configuration to set TTL for arbitrary objects
   # see https://codeberg.org/hjacobs/kube-janitor for details
   rules:
     []
@@ -35,7 +38,7 @@ kubejanitor:
     #   ttl: 4h
 
 cron:
-  # when enabled is set to false, a deployment will be used instead.
+  # -- When enabled is set to false, a deployment will be used instead of a cron job.
   enabled: true
   schedule: "*/5 * * * *"
   failedJobsHistoryLimit: 3
@@ -44,6 +47,7 @@ cron:
   # startingDeadlineSeconds: 300
 
 restartPolicy: OnFailure
+
 resources:
   limits:
     memory: 100Mi
