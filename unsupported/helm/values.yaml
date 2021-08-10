@@ -2,6 +2,7 @@ image:
   repository: hjacobs/kube-janitor
   tag: 20.4.1
   pullPolicy: IfNotPresent
+  pullSecrets: []
 
 kubejanitor:
   dryRun: false
