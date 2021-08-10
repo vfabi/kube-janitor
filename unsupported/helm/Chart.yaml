@@ -3,11 +3,11 @@ appVersion: "v20.4.1"
 description: Clean up (delete) Kubernetes resources after a configured TTL (time to live)
 name: kube-janitor
 version: 0.2.0
-home: https://github.com/hjacobs/kube-janitor
+home: https://codeberg.org/hjacobs/kube-janitor
 maintainers:
   - name: hjacobs
     email: henning@jacobs1.de
   - name: mayppong
     email: me@mayppong.com
 sources:
-  - https://github.com/hjacobs/kube-janitor
+  - https://codeberg.org/hjacobs/kube-janitor

@@ -1,12 +1,12 @@
 # Kube-Janitor
 Kubernetes Janitor cleans up (deletes) Kubernetes resources on (1) a configured TTL (time to live) or (2) a configured expiry date (absolute timestamp).
 
-This chart helps you deploy kube-janitor as CronJob on your Kubernetes cluster. You can find the original repo here: https://github.com/hjacobs/kube-janitor
+This chart helps you deploy kube-janitor as CronJob on your Kubernetes cluster. You can find the original repo here: https://codeberg.org/hjacobs/kube-janitor
 
 ## Configuration
 
 The deployment option for this chart currently only support CronJob type. Please checkout Kubernete's docs for more info on CronJob's [config options](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#cronjob-v1beta1-batch).
-You can check out more configuration examples on kube-janitor's own [README](https://github.com/hjacobs/kube-janitor#configuration) for more of the package's options.
+You can check out more configuration examples on kube-janitor's own [README](https://codeberg.org/hjacobs/kube-janitor#configuration) for more of the package's options.
 
 Some of the default values are not specified in the `values.yaml` and are instead inherited the default from upstream.
 

@@ -1,4 +1,5 @@
-apiVersion: batch/v1beta1
+{{- if .Values.cron.enabled }}
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: {{ template "chart.fullname" . }}
@@ -22,8 +23,14 @@ spec:
   startingDeadlineSeconds: {{ .Values.cron.startingDeadlineSeconds }}
   {{- end }}
   jobTemplate:
+    metadata:
+      labels:
+        app: {{ template "chart.name" . }}
     spec:
       template:
+        metadata:
+          labels:
+            app: {{ template "chart.name" . }}
         spec:
           serviceAccountName: {{ template "chart.fullname" . }}
           restartPolicy: {{ .Values.restartPolicy }}
@@ -48,36 +55,7 @@ spec:
             image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
             imagePullPolicy: {{ .Values.image.pullPolicy }}
             args:
-              {{- if .Values.kubejanitor.dryRun }}
-              - "--dry-run"
-              {{- end }}
-              {{- if .Values.kubejanitor.debug }}
-              - "--debug"
-              {{- end }}
-              {{- if .Values.kubejanitor.once }}
-              - "--once"
-              {{- end }}
-              {{- if .Values.kubejanitor.interval }}
-              - "--interval"
-              - "{{ .Values.kubejanitor.interval }}"
-              {{- end }}
-              {{- if .Values.kubejanitor.includeResources }}
-              - "--include-resources"
-              - "{{ .Values.kubejanitor.includeResources }}"
-              {{- end }}
-              {{- if .Values.kubejanitor.excludeResources }}
-              - "--exclude-resources"
-              - "{{ .Values.kubejanitor.excludeResources }}"
-              {{- end }}
-              {{- if .Values.kubejanitor.includeNamespaces }}
-              - "--include-namespaces"
-              - "{{ .Values.kubejanitor.includeNamespaces }}"
-              {{- end }}
-              {{- if .Values.kubejanitor.excludeNamespaces }}
-              - "--exclude-namespaces"
-              - "{{ .Values.kubejanitor.excludeNamespaces }}"
-              {{- end }}
-              - --rules-file=/config/rules.yaml
+{{- include "kubeJanitor.args" . | indent 14 }}
             {{- if .Values.resources }}
             resources:
 {{ toYaml .Values.resources | indent 14 }}
@@ -93,3 +71,4 @@ spec:
             - name: {{ template "chart.fullname" . }}-volume
               configMap:
                 name: {{ template "chart.fullname" . }}
+{{- end }}

@@ -19,7 +19,7 @@ spec:
       serviceAccountName: kube-janitor
       containers:
       - name: janitor
-        # see https://github.com/hjacobs/kube-janitor/releases
+        # see https://codeberg.org/hjacobs/kube-janitor/releases
         image: hjacobs/kube-janitor:20.10.0
         args:
           # dry run by default, remove to perform clean up

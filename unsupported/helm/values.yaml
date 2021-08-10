@@ -1,16 +1,21 @@
 image:
+  # -- Image to use for deploying
   repository: hjacobs/kube-janitor
-  tag: 20.4.1
+  tag: 20.10.0
   pullPolicy: IfNotPresent
   pullSecrets: []
 
+# -- Kube-janitor configuration
 kubejanitor:
   dryRun: false
   debug: false
   once: true
-  # example rules configuration to set TTL for arbitrary objects
-  # see https://github.com/hjacobs/kube-janitor for details
-  rules: []
+  # -- Additional arguments to pass to the command
+  additionalArgs: []
+  # -- example rules configuration to set TTL for arbitrary objects
+  # see https://codeberg.org/hjacobs/kube-janitor for details
+  rules:
+    []
     # - id: require-application-label
     #   # remove deployments and statefulsets without a label "application"
     #   resources:
@@ -33,6 +38,8 @@ kubejanitor:
     #   ttl: 4h
 
 cron:
+  # -- When enabled is set to false, a deployment will be used instead of a cron job.
+  enabled: true
   schedule: "*/5 * * * *"
   failedJobsHistoryLimit: 3
   # # for the cases of cron controller interuption
@@ -40,6 +47,7 @@ cron:
   # startingDeadlineSeconds: 300
 
 restartPolicy: OnFailure
+
 resources:
   limits:
     memory: 100Mi

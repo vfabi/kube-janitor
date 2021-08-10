@@ -1,0 +1,55 @@
+{{- if not .Values.cron.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ template "chart.name" . }}
+    chart: {{ template "chart.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  name: {{ template "chart.fullname" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      application: kube-janitor
+  template:
+    metadata:
+      labels:
+        app: {{ template "chart.name" . }}
+    spec:
+      serviceAccountName: {{ template "chart.fullname" . }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 12 }}
+      {{- end }}
+      {{- if .Values.affinity }}
+      affinity:
+{{ toYaml .Values.affinity | indent 12 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 12 }}
+      {{- end }}
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        args:
+{{- include "kubeJanitor.args" . | indent 10 }}
+        {{- if .Values.resources }}
+        resources:
+{{ toYaml .Values.resources | indent 14 }}
+        {{- end }}
+        securityContext:
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+        volumeMounts:
+          - name: {{ template "chart.fullname" . }}-volume
+            mountPath: /config
+      volumes:
+        - name: {{ template "chart.fullname" . }}-volume
+          configMap:
+            name: {{ template "chart.fullname" . }}
+{{- end }}

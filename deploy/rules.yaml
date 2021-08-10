@@ -1,5 +1,5 @@
 # example rules configuration to set TTL for arbitrary objects
-# see https://github.com/hjacobs/kube-janitor for details
+# see https://codeberg.org/hjacobs/kube-janitor for details
 rules:
   - id: require-application-label
     # remove deployments and statefulsets without a label "application"
